@@ -20,6 +20,7 @@ typedef void (^CallbackHandler)(NSDictionary * resultDictonary, NSError *error);
 
 -(instancetype) initWithApiUrlForPost:(NSString*) apiUrl body:(NSString*) bodyStr apiName:(NSString*) apiName;
 -(instancetype) initWithApiUrlForGet:(NSString*) apiUrl apiName:(NSString*) apiName;
--(void) connectWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler;
+-(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler;
+-(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallbackHandler) handler;
 
 @end

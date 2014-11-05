@@ -76,10 +76,29 @@
 /** use delegate **/
 
 /** use block**/
--(void) connectWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler
+-(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
+    
+    NSError *error;
+    NSURLResponse *response;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+    
+    if (handler) {
+        handler(jsonObject, error);
+    }
+}
+
+-(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallbackHandler) handler
+{
+    NSURL *url = [NSURL URLWithString:apiUrl];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [bodyStr dataUsingEncoding:NSUTF8StringEncoding];
     
     NSError *error;
     NSURLResponse *response;
