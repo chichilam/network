@@ -76,23 +76,23 @@
 /** use delegate **/
 
 /** use block**/
--(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler
+-(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
     
-    NSError *error;
-    NSURLResponse *response;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
-    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-    
-    if (handler) {
-        handler(jsonObject, error);
-    }
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) {
+                handler(jsonObject, error);
+            }
+        });
+    }];
 }
 
--(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallbackHandler) handler
+-(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
@@ -100,15 +100,15 @@
     request.HTTPMethod = @"POST";
     request.HTTPBody = [bodyStr dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSError *error;
-    NSURLResponse *response;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
-    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-    
-    if (handler) {
-        handler(jsonObject, error);
-    }
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) {
+                handler(jsonObject, error);
+            }
+        });
+    }];
 }
 /** use block**/
 
