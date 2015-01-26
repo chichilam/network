@@ -12,7 +12,7 @@
 -(void) failedGetData:(NSError*)error  apiName:(NSString*) apiName;
 @end
 
-typedef void (^CallbackHandler)(NSDictionary * resultDictonary, NSError *error);
+typedef void (^CallNetworkbackHandler)(NSDictionary * resultDictonary, NSError *error);
 
 @interface NetWork : NSObject<NSURLConnectionDataDelegate>
 
@@ -20,7 +20,9 @@ typedef void (^CallbackHandler)(NSDictionary * resultDictonary, NSError *error);
 
 -(instancetype) initWithApiUrlForPost:(NSString*) apiUrl body:(NSString*) bodyStr apiName:(NSString*) apiName;
 -(instancetype) initWithApiUrlForGet:(NSString*) apiUrl apiName:(NSString*) apiName;
--(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallbackHandler) handler;
--(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallbackHandler) handler;
++(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler;
++(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler;
++(void) urlSessionForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler;
++(void) urlSessionForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler;
 
 @end

@@ -76,7 +76,7 @@
 /** use delegate **/
 
 /** use block**/
--(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler
++(void) connectForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
@@ -102,7 +102,7 @@
     }];
 }
 
--(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler
++(void) connectForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
@@ -127,9 +127,70 @@
                 }
             });
         }
-        
+
     }];
 }
 /** use block**/
 
+/** url session**/
+
++(void) urlSessionForGetWithUrl:(NSString*) apiUrl handler:(CallNetworkbackHandler) handler {
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    
+    [[urlSession dataTaskWithURL: [NSURL URLWithString: apiUrl]
+                completionHandler:^(NSData *data, NSURLResponse *response,NSError *error) {
+                    if(error == nil) {
+                        NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (handler) {
+                                handler(jsonObject, error);
+                            }
+                        });
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (handler) {
+                                handler(nil, error);
+                            }
+                        });
+                    }
+                }] resume];
+}
+
++(void) urlSessionForPostWithUrl:(NSString*) apiUrl body:(NSString*) bodyStr handler:(CallNetworkbackHandler) handler {
+    
+    NSURL *url = [NSURL URLWithString:apiUrl];
+    
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [bodyStr dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    
+    [[urlSession dataTaskWithRequest:request
+                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                       if(error == nil) {
+                           NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                           
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               if (handler) {
+                                   handler(jsonObject, error);
+                               }
+                           });
+                       } else {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               if (handler) {
+                                   handler(nil, error);
+                               }
+                           });
+                       }
+                   }] resume];
+}
+
+/** url session**/
 @end
