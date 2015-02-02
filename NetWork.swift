@@ -16,7 +16,7 @@ class NetWork: NSObject {
     :param: apiUrlStr url
     :param: callback  result
     */
-    func connetByGet(urlStr: String!, callback: (AnyObject, NSError!) -> ()) {
+    class func connetByGet(urlStr: String!, callback: (AnyObject, NSError!) -> ()) {
         
         let url:NSURL = NSURL(string: urlStr)!
                 
@@ -45,7 +45,7 @@ class NetWork: NSObject {
     :param: bodyStr   post data
     :param: callback  resutl
     */
-    func connectByPost(urlStr: String!, bodyStr: String!, callback:(AnyObject, NSError!) -> ()) {
+    class func connectByPost(urlStr: String!, bodyStr: String!, callback:(AnyObject, NSError!) -> ()) {
         let url:NSURL = NSURL(string: urlStr)!
         
         var request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
@@ -75,7 +75,7 @@ class NetWork: NSObject {
     :param: apiUrlStr url
     :param: callback  result
     */
-    func connectSessionByGet(urlStr: String!, callback: (AnyObject, NSError!) -> ()) {
+    class func connectSessionByGet(urlStr: String!, callback: (AnyObject, NSError!) -> ()) {
         
         let url:NSURL = NSURL(string: urlStr)!
         
@@ -98,7 +98,7 @@ class NetWork: NSObject {
         task.resume()
     }
     
-    func connectSessionByPost(urlStr: String!, bodyStr: String!, callback: (AnyObject, NSError!) -> ()) {
+    class func connectSessionByPost(urlStr: String!, bodyStr: String!, callback: (AnyObject, NSError!) -> ()) {
         let url:NSURL = NSURL(string: urlStr)!
         
         var request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
