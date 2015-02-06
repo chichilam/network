@@ -104,9 +104,13 @@ class NetWork: NSObject {
                 
                 var jsonResutl: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonError) as NSDictionary
                 
-                callback(jsonResutl,jsonError)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(jsonResutl,jsonError)
+                })
             } else {
-               callback(data,error)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(data,error)
+                })
             }
           }
     }
@@ -137,9 +141,13 @@ class NetWork: NSObject {
                 
                 var jsonResutl: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonError) as NSDictionary
                 
-                callback(jsonResutl,jsonError)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(jsonResutl,jsonError)
+                })
             } else {
-                callback(data,error)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(data,error)
+                })
             }
         }
     }
@@ -163,10 +171,14 @@ class NetWork: NSObject {
                 //convert json data to dictionary
                 var jsonResutl = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonError) as NSDictionary
                 
-                callback(jsonResutl, jsonError)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(jsonResutl,jsonError)
+                })
                 
             } else {
-                callback(data, error)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(data,error)
+                })
             }
         })
         
@@ -192,10 +204,14 @@ class NetWork: NSObject {
                 //convert json data to dictionary
                 var jsonResutl = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonError) as NSDictionary
                 
-                callback(jsonResutl, jsonError)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(jsonResutl,jsonError)
+                })
                 
             } else {
-                callback(data, error)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(data,error)
+                })
             }
         })
         
